@@ -90,10 +90,10 @@ An Edge Router connects the internal network to a simulated ISP, enabling intern
 ## How to use
 
 **Open the completed simulation:**  
-Download and open [`3-tier-enterprise-network.pkt`](packet-tracer-file/) in Cisco Packet Tracer.
+Download and open [`3-tier-enterprise-network.pkt`](packet-tracer-file/3-tier-enterprise-network.pkt) in Cisco Packet Tracer.
 
 **Recreate the project from scratch:**   
-1\. Download the unconfigured topology file: [`3-tier-enterprise-network_no-config.pkt`](packet-tracer-file/).  
+1\. Download the unconfigured topology file: [`3-tier-enterprise-network_no-config.pkt`](packet-tracer-file/3-tier-enterprise-network_no-config.pkt).  
 2\. Follow the step-by-step guides in [`configs/step-by-step/`](configs/step-by-step/) in numerical order, starting from `01-initial-setup.txt`.
 
 **Network Design Reference:**  
