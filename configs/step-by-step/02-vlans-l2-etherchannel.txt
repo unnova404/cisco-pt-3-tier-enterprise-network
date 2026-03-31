@@ -1,0 +1,271 @@
+===================================
+PART 2: VLANS, LAYER-2 ETHERCHANNEL
+===================================
+
+======= 1. L2 Etherchannel =======
+## all Distribution Switches ##
+interface range g1/1/1-2
+channel-group 1 mode active
+
+======= 2. Trunk Configuration =======
+## for ASW1-ASW6 ##
+interface range g0/1-2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,40,50,60,200,500
+
+## for ASW7-ASW12 ##
+interface range g0/1-2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 70,80,90,100,110,120,200,500
+
+## for DSW1 & DSW2 ##
+interface range g1/0/1-6
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,40,50,60,200,500
+exit
+interface po1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 10,20,30,40,50,60,200,500
+
+## for DSW3 & DSW4 ##
+interface range g1/0/1-6
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 70,80,90,100,110,120,200,500
+exit
+interface po1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk native vlan 1000
+switchport trunk allowed vlan 70,80,90,100,110,120,200,500
+
+======= 3. VTP =======
+## all Distribution Switches ##
+vtp domain ENTERPRISE
+vtp version 2
+vtp password Enterprise@VTP
+vtp mode server
+
+## all Access Switches ##
+vtp domain ENTERPRISE
+vtp version 2
+vtp password Enterprise@VTP
+vtp mode client
+do copy run start
+
+======= 4. Vlan Configuration =======
+## configure this to either DSW1 or DSW2 ##
+vlan 10
+name LOGISTICS
+vlan 20
+name SALES
+vlan 30
+name CUSTOMER_SUPPORT
+vlan 40
+name HR
+vlan 50
+name ACCOUNTING
+vlan 60
+name LEGAL
+vlan 200
+name VOICE
+vlan 500 
+name MANAGEMENT
+vlan 1000
+name MISC
+
+## configure this to either DSW3 or DSW4 ##
+vlan 70
+name RESEARCH
+vlan 80
+name ENGINEERING
+vlan 90
+name PROJECT_MGMT
+vlan 100
+name IT
+vlan 110
+name EXECUTIVE
+vlan 120
+name SERVER
+vlan 200
+name VOICE
+vlan 500 
+name MANAGEMENT
+vlan 1000
+name MISC
+
+======= 5. Access Port Configuration ======= 
+## for ASW1 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 10
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 10
+switchport voice vlan 200
+
+## for ASW2 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 20
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 20
+switchport voice vlan 200
+
+## for ASW3 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 30
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 30
+switchport voice vlan 200
+
+## for ASW4 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 40
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 40
+switchport voice vlan 200
+
+## for ASW5 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 50
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 50
+switchport voice vlan 200
+
+## for ASW6 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 60
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 60
+switchport voice vlan 200
+
+## for ASW7 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 70
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 70
+switchport voice vlan 200
+
+## for ASW8 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 80
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 80
+switchport voice vlan 200
+
+## for ASW9 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 90
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 90
+switchport voice vlan 200
+
+## for ASW10 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 100
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 100
+switchport voice vlan 200
+
+## for ASW11 ##
+interface range f0/23-24
+switchport mode access
+switchport nonegotiate
+switchport access vlan 110
+exit
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 110
+switchport voice vlan 200
+
+## for ASW12 ##
+interface f0/1
+switchport mode access
+switchport nonegotiate
+switchport access vlan 200
+exit
+interface range f0/2-5
+switchport mode access
+switchport nonegotiate
+switchport access vlan 120
+
+======= 6. Disabling Unused Ports =======
+## for ASW1-ASW11 ##
+interface range f0/2-22
+switchport mode access
+switchport access vlan 1000
+shutdown
+
+## for ASW12 ##
+interface range f0/6-24
+switchport mode access
+switchport access vlan 1000
+shutdown
+
+## all Distribution Switches ##
+interface range g1/0/7-24
+switchport mode access
+switchport access vlan 1000
+shutdown
+
+## all Core Switches ##
+interface range g1/0/8-28
+shutdown

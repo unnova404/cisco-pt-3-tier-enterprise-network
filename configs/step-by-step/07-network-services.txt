@@ -1,0 +1,259 @@
+==========================================================
+PART 7: NETWORK SERVICES: DHCP, DNS, NTP, SYSLOG, SSH, NAT
+==========================================================
+
+======= 1. DHCP Server =======
+## for DHCP Server-PT ##
+IP Address: 10.1.120.20
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.1.120.1
+DNS Server: 10.1.120.30
+
+*Input the following in the Server-PT GUI
+Set the Service to On for DHCP, and turn off all other service
+
+~ Entry 1 ~
+Pool Name: LOGISTICS10
+Default GateWay: 10.1.10.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.10.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 2 ~
+Pool Name: SALES20
+Default GateWay: 10.1.20.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.20.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 3 ~
+Pool Name: CS30
+Default GateWay: 10.1.30.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.30.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 4 ~
+Pool Name: HR40
+Default GateWay: 10.1.40.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.40.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 5 ~
+Pool Name: ACCOUNTING50
+Default GateWay: 10.1.50.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.50.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 6 ~
+Pool Name: LEGAL60
+Default GateWay: 10.1.60.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.60.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 7 ~
+Pool Name: RND70
+Default GateWay: 10.1.70.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.70.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 8 ~
+Pool Name: ENGINEERING80
+Default GateWay: 10.1.80.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.80.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 9 ~
+Pool Name: PROJECT90
+Default GateWay: 10.1.90.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.90.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 10 ~
+Pool Name: IT100
+Default GateWay: 10.1.100.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.100.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+~ Entry 11 ~
+Pool Name: EXECUTIVE110
+Default GateWay: 10.1.110.1
+DNS Server: 10.1.120.30
+Start IP Address: 10.1.110.11
+Subnet Mask: 255.255.255.0
+Maximum Number of Users: 244
+
+======= 2. DHCP relay agent =======
+## for DSW1 & DSW2 ##
+interface vlan 10
+ip helper-address 10.1.120.20
+interface vlan 20
+ip helper-address 10.1.120.20
+interface vlan 30
+ip helper-address 10.1.120.20
+interface vlan 40
+ip helper-address 10.1.120.20
+interface vlan 50
+ip helper-address 10.1.120.20
+interface vlan 60
+ip helper-address 10.1.120.20
+
+## for DSW3 & DSW4 ##
+interface vlan 70
+ip helper-address 10.1.120.20
+interface vlan 80
+ip helper-address 10.1.120.20
+interface vlan 90
+ip helper-address 10.1.120.20
+interface vlan 100
+ip helper-address 10.1.120.20
+interface vlan 110
+ip helper-address 10.1.120.20
+exit
+do copy run start
+
+======= 3. DNS Records =======
+## for DNS Server-PT ##
+IP Address: 10.1.120.30
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.1.120.1
+DNS Server: 10.1.120.30
+
+*Input the following in the Server-PT GUI
+Set the Service to On for DNS, and turn off all other service
+
+~ for A Records ~
+Name: google.com 
+Address: 172.253.62.100
+
+Name: youtube.com  
+Address: 152.250.31.92
+
+Name: gmail.com
+Address: 66.235.200.145
+
+Name: enterprise.com
+Address: 10.1.120.40
+
+~ for CNAME Records ~
+Name: www.google.com
+Hostname: google.com
+
+Name: www.youtube.com
+Hostname: youtube.com
+
+Name: www.gmail.com
+Hostname: gmail.com
+
+======= 4. Domain name and DNS server on switches and routers =======
+## for all network devices ##
+ip domain name enterprise.com
+ip name-server 10.1.120.30
+do copy run start
+
+======= 5. NTP =======
+## for R1 ##
+ntp master 5
+ntp server 216.239.25.4
+ntp authentication-key 1 md5 enterprise@NTP
+ntp trusted-key 1
+
+## for all the network devices except R1 ##
+ntp authentication-key 1 md5 enterprise@NTP
+ntp trusted-key 1
+ntp server 10.1.0.135 key 1
+do copy run start
+
+======= 7. Syslog, HTTP, and HTTPS  =======
+## for SYSLOG SERVER-PT ##
+IP Address: 10.1.120.40
+Subnet Mask: 255.255.255.0
+Default Gateway: 10.1.120.1
+DNS Server: 10.1.120.30
+
+Set the Service to On for SYSLOG, HTTP, and HTTPS, and turn off all other service
+
+## for Distribution, Core, and Router ##
+logging on
+logging host 10.1.120.40
+logging trap debugging
+service timestamps log datetime msec
+logging userinfo
+logging buffered 8192
+do copy run start
+
+## for Access Switches ##
+logging on
+logging host 10.1.120.40
+logging trap debugging
+service timestamps log datetime msec
+logging buffered 8192
+do copy run start
+
+======= 8. SSH =======
+## for all network devices ##
+crypto key generate rsa
+4096
+ip ssh version 2
+ip access-list standard VTY_SSH
+permit 10.1.100.0 0.0.0.255
+exit
+line vty 0 15
+access-class VTY_SSH in
+transport input ssh
+login local
+logging synchronous
+
+======= 9. Dynamic PAT =======
+## for R1 ##
+ip access-list standard PAT-ACL
+permit 10.0.0.0 0.0.0.255
+permit 10.1.0.0 0.0.0.255
+permit 10.1.10.0 0.0.0.255
+permit 10.1.20.0 0.0.0.255
+permit 10.1.30.0 0.0.0.255
+permit 10.1.40.0 0.0.0.255
+permit 10.1.50.0 0.0.0.255
+permit 10.1.60.0 0.0.0.255
+permit 10.1.70.0 0.0.0.255
+permit 10.1.80.0 0.0.0.255
+permit 10.1.90.0 0.0.0.255
+permit 10.1.100.0 0.0.0.255
+permit 10.1.110.0 0.0.0.255
+permit 10.1.120.0 0.0.0.255
+permit 10.1.200.0 0.0.0.255
+permit 10.1.500.0 0.0.0.255
+exit
+ip nat inside source list PAT-ACL interface g0/0/0 overload
+interface range g0/1/0,g0/2/0
+ip nat inside
+interface g0/0/0
+ip nat outside
+exit
+do copy run start
+
+======= 10. Disable CDP on interfaces connected to endpoints =======
+## for ASW1-ASW11 ##
+interface range f0/1, f0/23-24
+no cdp enable
+
+## for ASW12 ##
+interface range f0/3-5
+no cdp enable

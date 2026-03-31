@@ -1,0 +1,270 @@
+===================
+ASW12 Configuration
+===================
+
+Current configuration : 6010 bytes
+!
+version 12.1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname ASW12
+!
+enable secret 5 $1$mERr$IUX5neozf5e8cmx.M6cIp0
+!
+!
+!
+ip ssh version 2
+ip domain-name enterprise.com
+ip name-server 10.1.120.30
+!
+username netadmin secret 5 $1$mERr$ZbmYB45amKd1F7P/ooXRx.
+!
+ip arp inspection vlan 70,80,90,100,110,120,200
+ip arp inspection validate src-mac dst-mac ip
+!
+ip dhcp snooping vlan 70,80,90,100,110,120,200
+no ip dhcp snooping information option
+ip dhcp snooping
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+ description ## TO CME_VLAN200 ##
+ switchport access vlan 200
+ ip dhcp snooping limit rate 15
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security violation restrict 
+ switchport port-security mac-address sticky 000A.F395.AE01
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/2
+ description ## TO CME_VLAN120 ##
+ switchport access vlan 120
+ ip dhcp snooping limit rate 15
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security violation restrict 
+ switchport port-security mac-address sticky 000A.F395.AE02
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/3
+ description ## TO DHCP SERVER ##
+ switchport access vlan 120
+ ip dhcp snooping limit rate 15
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security violation restrict 
+ switchport port-security mac-address sticky 00E0.F755.1587
+ no cdp enable
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/4
+ description ## TO DNS SERVER ##
+ switchport access vlan 120
+ ip dhcp snooping limit rate 15
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security violation restrict 
+ switchport port-security mac-address sticky 00E0.B0E7.7A09
+ no cdp enable
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/5
+ description ## TO SYSLOG SERVER ##
+ switchport access vlan 120
+ ip dhcp snooping limit rate 15
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security violation restrict 
+ switchport port-security mac-address sticky 0005.5E66.AC29
+ no cdp enable
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/6
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/7
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/8
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/9
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/10
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/11
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/12
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/13
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/14
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/15
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/16
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/17
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/18
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/19
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/20
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/21
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/22
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/23
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface FastEthernet0/24
+ description ## NOT IN USE ##
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet0/1
+ description ## TO DSW3 ##
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 70,80,90,100,110,120,200,500
+ ip arp inspection trust
+ ip dhcp snooping trust
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet0/2
+ description ## TO DSW4 ##
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 70,80,90,100,110,120,200,500
+ ip arp inspection trust
+ ip dhcp snooping trust
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan500
+ ip address 10.1.0.76 255.255.255.192
+!
+ip default-gateway 10.1.0.65
+!
+logging trap debugging
+logging 10.1.120.40
+!
+!
+!
+ip access-list standard VTY_SSH
+ permit 10.1.100.0 0.0.0.255
+line con 0
+ logging synchronous
+ login local
+!
+line vty 0 4
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+!
+!
+!
+ntp trusted-key 1
+ntp server 10.1.0.135 key 1
+!
+end

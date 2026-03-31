@@ -1,0 +1,226 @@
+=======================
+Telephony Configuration
+=======================
+
+Current configuration : 3130 bytes
+!
+version 15.1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Telephony
+!
+logging userinfo
+!
+!
+enable secret 5 $1$mERr$IUX5neozf5e8cmx.M6cIp0
+!
+!
+ip dhcp excluded-address 10.1.200.1 10.1.200.10
+ip dhcp excluded-address 10.1.200.129 10.1.200.138
+!
+ip dhcp pool VOICE-FL12
+ network 10.1.200.0 255.255.255.128
+ default-router 10.1.200.1
+ option 150 ip 10.1.200.133
+ dns-server 10.1.120.30
+ip dhcp pool VOICE-FL34
+ network 10.1.200.128 255.255.255.128
+ default-router 10.1.200.129
+ option 150 ip 10.1.200.133
+ dns-server 10.1.120.30
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+username netadmin secret 5 $1$mERr$ZbmYB45amKd1F7P/ooXRx.
+!
+!
+license udi pid CISCO2811/K9 sn FTX1017U918-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name enterprise.com
+ip name-server 10.1.120.30
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description ## TO ASW12 VLAN200 ##
+ ip address 10.1.200.133 255.255.255.128
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ description ## TO ASW12 VLAN120 ##
+ ip address 10.1.120.10 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.1.200.129 
+!
+ip flow-export version 9
+!
+!
+ip access-list standard VTY_SSH
+ permit 10.1.100.0 0.0.0.255
+!
+!
+!
+!
+!
+logging trap debugging
+logging 10.1.120.40
+telephony-service
+ max-ephones 11
+ max-dn 11
+ ip source-address 10.1.200.133 port 2000
+ auto assign 1 to 11
+!
+ephone-dn 1
+ number 1001
+!
+ephone-dn 2
+ number 1002
+!
+ephone-dn 3
+ number 1003
+!
+ephone-dn 4
+ number 1004
+!
+ephone-dn 5
+ number 1005
+!
+ephone-dn 6
+ number 1006
+!
+ephone-dn 7
+ number 1007
+!
+ephone-dn 8
+ number 1008
+!
+ephone-dn 9
+ number 1009
+!
+ephone-dn 10
+ number 1010
+!
+ephone-dn 11
+ number 1011
+!
+ephone 1
+ device-security-mode none
+ mac-address 0040.0B97.0398
+ type 7960
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 000A.F348.A132
+ type 7960
+ button 1:2
+!
+ephone 3
+ device-security-mode none
+ mac-address 00E0.F79B.EDD7
+ type 7960
+ button 1:3
+!
+ephone 4
+ device-security-mode none
+ mac-address 0001.C785.EB2E
+ type 7960
+ button 1:4
+!
+ephone 5
+ device-security-mode none
+ mac-address 00D0.BABB.9100
+ type 7960
+ button 1:5
+!
+ephone 6
+ device-security-mode none
+ mac-address 0001.97AA.9844
+ type 7960
+ button 1:6
+!
+ephone 7
+ device-security-mode none
+ mac-address 000D.BDD0.579D
+ type 7960
+ button 1:7
+!
+ephone 8
+ device-security-mode none
+ mac-address 0000.0CD8.ADD1
+ type 7960
+ button 1:8
+!
+ephone 9
+ device-security-mode none
+ mac-address 0001.4371.04A2
+ type 7960
+ button 1:9
+!
+ephone 10
+ device-security-mode none
+ mac-address 0006.2AE7.85E3
+ type 7960
+ button 1:10
+!
+ephone 11
+ device-security-mode none
+ mac-address 0001.967A.2A31
+ type 7960
+ button 1:11
+!
+line con 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+!
+!
+ntp authentication-key 1 md5 0824425A0C0B15051B180924041F14 7
+ntp trusted-key 1
+ntp server 10.1.0.135 key 1
+!
+end

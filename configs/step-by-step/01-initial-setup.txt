@@ -1,0 +1,28 @@
+=====================
+PART 1: INITIAL SETUP
+=====================
+
+======= 1. Hostnames =======
+## for all network devices ##
+hostname [WORD]
+
+======= 2. Enable Secret =======
+## for ASW1-ASW12, R1, Telephony ##
+enable secret Admin@1234
+
+## for DSW1-DSW4, CSW1-CSW2 ##
+enable algorithm-type scrypt secret Admin@1234
+
+======= 3. User Account =======
+## for ASW1-ASW12, R1, Telephony ##
+username netadmin secret Root@1234
+
+## for DSW1-DSW4, CSW1-CSW2 ##
+username netadmin algorithm-type scrypt secret Root@1234
+
+======= 4. Console =======
+## for all network devices ##
+line console 0
+login local
+exec-timeout 10
+logging synchronous

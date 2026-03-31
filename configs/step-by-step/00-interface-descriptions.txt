@@ -1,0 +1,186 @@
+=====================
+INTERFACE DESCRIPTION
+=====================
+
+======= 1. Interface Description =======
+## for ASW1-ASW6 ##
+interface f0/1
+description ## TO PC & PHONE ##
+interface f0/23
+description ## TO PRINTER ##
+interface f0/24
+description ## TO ACCESS POINT ##
+interface g0/1
+description ## TO DSW1 ##
+interface g0/2
+description ## TO DSW2 ##
+interface range f0/2-22
+description ## NOT IN USE ##
+
+## for ASW7-ASW11 ##
+interface f0/1
+description ## TO PC & PHONE ##
+interface f0/23
+description ## TO PRINTER ##
+interface f0/24
+description ## TO ACCESS POINT ##
+interface g0/1
+description ## TO DSW3 ##
+interface g0/2
+description ## TO DSW4 ##
+interface range f0/2-22
+description ## NOT IN USE ##
+
+## for ASW12 ##
+interface f0/1
+description ## TO CME_VLAN200 ##
+interface f0/2
+description ## TO CME_VLAN120 ##
+interface f0/3
+description ## TO DHCP SERVER ##
+interface f0/4
+description ## TO DNS SERVER ##
+interface f0/5 
+description ## TO SYSLOG SERVER ##
+interface g0/1
+description ## TO DSW3 ##
+interface g0/2
+description ## TO DSW4 ##
+interface range f0/6-24
+description ## NOT IN USE ##
+
+## for DSW1 ##
+interface g1/0/1
+description ## TO ASW1 ##
+interface g1/0/2
+description ## TO ASW2 ##
+interface g1/0/3
+description ## TO ASW3 ##
+interface g1/0/4
+description ## TO ASW4 ##
+interface g1/0/5
+description ## TO ASW5 ##
+interface g1/0/6
+description ## TO ASW6 ##
+interface range g1/1/1-2
+description ## TO DSW2 ##
+interface po1
+description ## TO DSW2 ##
+interface g1/1/3
+description ## TO CSW1 ##
+interface g1/1/4 
+description ## TO CSW2 ##
+interface range g1/0/7-24
+description ## NOT IN USE ##
+
+## for DSW2 ##
+interface g1/0/1
+description ## TO ASW1 ##
+interface g1/0/2
+description ## TO ASW2 ##
+interface g1/0/3
+description ## TO ASW3 ##
+interface g1/0/4
+description ## TO ASW4 ##
+interface g1/0/5
+description ## TO ASW5 ##
+interface g1/0/6
+description ## TO ASW6 ##
+interface range g1/1/1-2
+description ## TO DSW1 ##
+interface po1
+description ## TO DSW1 ##
+interface g1/1/3
+description ## TO CSW1 ##
+interface g1/1/4 
+description ## TO CSW2 ##
+interface range g1/0/7-24
+description ## NOT IN USE ##
+
+## for DSW3 ##
+interface g1/0/1
+description ## TO ASW7 ##
+interface g1/0/2
+description ## TO ASW8 ##
+interface g1/0/3
+description ## TO ASW9 ##
+interface g1/0/4
+description ## TO ASW10 ##
+interface g1/0/5
+description ## TO ASW11 ##
+interface g1/0/6
+description ## TO ASW12 ##
+interface range g1/1/1-2
+description ## TO DSW4 ##
+interface po1
+description ## TO DSW4 ##
+interface g1/1/3
+description ## TO CSW1 ##
+interface g1/1/4 
+description ## TO CSW2 ##
+interface range g1/0/7-24
+description ## NOT IN USE ##
+
+## for DSW4 ##
+interface g1/0/1
+description ## TO ASW7 ##
+interface g1/0/2
+description ## TO ASW8 ##
+interface g1/0/3
+description ## TO ASW9 ##
+interface g1/0/4
+description ## TO ASW10 ##
+interface g1/0/5
+description ## TO ASW11 ##
+interface g1/0/6
+description ## TO ASW12 ##
+interface range g1/1/1-2
+description ## TO DSW3 ##
+interface po1
+description ## TO DSW3 ##
+interface g1/1/3
+description ## TO CSW1 ##
+interface g1/1/4 
+description ## TO CSW2 ##
+interface range g1/0/7-24
+description ## NOT IN USE ##
+
+## for CSW1 ##
+interface range g1/0/1-2
+description ## TO CSW2 ##
+interface range g1/0/3
+description ## TO R1 ##
+interface g1/0/4
+description ## TO DSW1 ##
+interface g1/0/5
+description ## TO DSW2 ##
+interface g1/0/6
+description ## TO DSW3 ##
+interface g1/0/7
+description ## TO DSW4 ##
+interface range g1/0/8-28
+description ## NOT IN USE ##
+
+## for CSW2 ##
+interface range g1/0/1-2
+description ## TO CSW1 ##
+interface range g1/0/3
+description ## TO R1 ##
+interface g1/0/4
+description ## TO DSW1 ##
+interface g1/0/5
+description ## TO DSW2 ##
+interface g1/0/6
+description ## TO DSW3 ##
+interface g1/0/7
+description ## TO DSW4 ##
+interface range g1/0/8-28
+description ## NOT IN USE ##
+
+## for R1 ##
+interface g0/1/0
+description ## TO CSW1 ##
+interface g0/2/0 
+description ## TO CSW2 ##
+interface g0/0/0
+description ## TO ISP1 ##

@@ -1,0 +1,59 @@
+================
+PART 9: WIRELESS
+================
+
+======= 1. Configuring Access Points =======
+## for AP-LOG ##
+SSID: LOG-WIFI
+5 GHz Channel: 36
+WPA2-PSK Pass Phrase: Enterprise@LOG
+
+## for AP-MKT ##
+SSID: MKT-WIFI
+5 GHz Channel: 40
+WPA2-PSK Pass Phrase: Enterprise@MKT
+
+## for AP-CS ##
+SSID: CS-WIFI
+5 GHz Channel: 44
+WPA2-PSK Pass Phrase: Enterprise@CS
+
+## for AP-HR ##
+SSID: HR-WIFI
+5 GHz Channel: 48
+WPA2-PSK Pass Phrase: Enterprise@HR
+
+## for AP-ACC ##
+SSID: ACC-WIFI
+5 GHz Channel: 52
+WPA2-PSK Pass Phrase: Enterprise@ACC
+
+## for AP-LGL ##
+SSID: LGL-WIFI
+5 GHz Channel: 56
+WPA2-PSK Pass Phrase: Enterprise@LGL
+
+## for AP-RND ##
+SSID: RND-WIFI
+5 GHz Channel: 60
+WPA2-PSK Pass Phrase: Enterprise@RND
+
+## for AP-ENG ##
+SSID: ENG-WIFI
+5 GHz Channel: 64
+WPA2-PSK Pass Phrase: Enterprise@ENG
+
+## for AP-PROJ ##
+SSID: PROJ-WIFI
+5 GHz Channel: 100
+WPA2-PSK Pass Phrase: Enterprise@PROJ
+
+## for AP-IT ##
+SSID: IT-WIFI
+5 GHz Channel: 104
+WPA2-PSK Pass Phrase: Enterprise@IT
+
+## for AP-EXEC ##
+SSID: EXEC-WIFI
+5 GHz Channel: 108
+WPA2-PSK Pass Phrase: Enterprise@EXEC

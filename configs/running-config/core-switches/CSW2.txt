@@ -1,0 +1,248 @@
+==================
+CSW2 Configuration
+==================
+
+Current configuration : 4282 bytes
+!
+version 17.12.1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname CSW2
+!
+logging userinfo
+!
+no profinet
+enable secret 9 $9$J19FIAftPZf7c3$kmXaMTMVSDLMMD7qVhB3AdolhoCGqr7nVlTc6SnZ4OA
+!
+!
+!
+!
+!
+!
+no ip cef
+ip routing
+!
+no ipv6 cef
+!
+!
+!
+ptp clock transparent domain 0 profile default
+license boot level ipbasek9
+username netadmin secret 9 $9$J19FIAftPZf7c3$EMmCGoqOG9LM9eq4wrAnb6Ql9pIEE8aNdwGjH2zdu7g
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name enterprise.com
+ip name-server 10.1.120.30
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.1.0.134 255.255.255.255
+!
+interface Port-channel1
+ description ## TO CSW1 ##
+ no switchport
+ ip address 10.0.0.10 255.255.255.252
+!
+interface GigabitEthernet1/0/1
+ description ## TO CSW1 ##
+ no switchport
+ no ip address
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/0/2
+ description ## TO CSW1 ##
+ no switchport
+ no ip address
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/0/3
+ description ## TO R1 ##
+ no switchport
+ ip address 10.0.0.5 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf priority 1
+!
+interface GigabitEthernet1/0/4
+ description ## TO DSW1 ##
+ no switchport
+ ip address 10.0.0.18 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf priority 1
+!
+interface GigabitEthernet1/0/5
+ description ## TO DSW2 ##
+ no switchport
+ ip address 10.0.0.26 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf priority 1
+!
+interface GigabitEthernet1/0/6
+ description ## TO DSW3 ##
+ no switchport
+ ip address 10.0.0.34 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf priority 1
+!
+interface GigabitEthernet1/0/7
+ description ## TO DSW4 ##
+ no switchport
+ ip address 10.0.0.42 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf priority 1
+!
+interface GigabitEthernet1/0/8
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/9
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/10
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/11
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/12
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/13
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/14
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/15
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/16
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/17
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/18
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/19
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/20
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/21
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/22
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/23
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/24
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/25
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/26
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/27
+ description ## NOT IN USE ##
+ shutdown
+!
+interface GigabitEthernet1/0/28
+ description ## NOT IN USE ##
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 10.1.0.134
+ log-adjacency-changes
+ passive-interface Loopback0
+ network 10.0.0.10 0.0.0.0 area 0
+ network 10.0.0.5 0.0.0.0 area 0
+ network 10.0.0.18 0.0.0.0 area 0
+ network 10.0.0.26 0.0.0.0 area 0
+ network 10.0.0.34 0.0.0.0 area 0
+ network 10.0.0.42 0.0.0.0 area 0
+ network 10.1.0.133 0.0.0.0 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+ip access-list standard VTY_SSH
+ permit 10.1.100.0 0.0.0.255
+!
+!
+!
+!
+!
+logging trap debugging
+logging 10.1.120.40
+line con 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ access-class VTY_SSH in
+ logging synchronous
+ login local
+ transport input ssh
+!
+!
+!
+ntp authentication-key 1 md5 0824425A0C0B15051B180924041F14 7
+ntp trusted-key 1
+ntp server 10.1.0.135 key 1
+!
+end

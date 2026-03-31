@@ -1,0 +1,155 @@
+====================================================
+PART 8: SECURITY: ACLs and LAYER-2 Security Features
+====================================================
+
+======= 1. Extended ACLs =======
+## for DSW3 & DSW4 ##
+ip access-list extended PROTECT_SERVERS
+permit ip 10.1.100.0 0.0.0.255 10.1.120.0 0.0.0.255
+permit udp 10.0.0.0 0.255.255.255 10.1.120.20 0.0.0.0 eq 67
+permit udp 10.0.0.0 0.255.255.255 10.1.120.20 0.0.0.0 eq 68
+permit udp 10.0.0.0 0.255.255.255 10.1.120.30 0.0.0.0 eq 53
+permit tcp 10.0.0.0 0.255.255.255 10.1.120.30 0.0.0.0 eq 53
+permit tcp 10.0.0.0 0.255.255.255 10.1.120.40 0.0.0.0 eq 80
+permit tcp 10.0.0.0 0.255.255.255 10.1.120.40 0.0.0.0 eq 443
+permit udp 10.0.0.0 0.255.255.255 10.1.120.40 0.0.0.0 eq 514
+deny ip 10.0.0.0 0.255.255.255 10.1.120.0 0.0.0.255
+permit ip any any
+exit
+interface vlan 120
+ip access-group PROTECT_SERVERS out
+
+## for DSW1-DSW4 ##
+ip access-list extended VOICE_ISOLATION
+permit udp any 10.1.200.133 0.0.0.0 eq 67
+permit udp any 10.1.200.133 0.0.0.0 eq 68
+permit udp 10.1.200.0 0.0.0.255 10.1.200.133 0.0.0.0 eq 69
+permit tcp 10.1.200.0 0.0.0.255 10.1.200.133 0.0.0.0 eq 2000
+permit ip 10.1.200.0 0.0.0.127 10.1.200.128 0.0.0.127
+permit ip 10.1.200.128 0.0.0.127 10.1.200.0 0.0.0.127
+deny ip 10.1.200.0 0.0.0.255 10.1.0.0 0.0.255.255
+permit ip any any
+interface vlan 200
+ip access-group VOICE_ISOLATION in
+
+## for DSW1 & DSW2 ##
+ip access-list extended RESTRICT_ACCOUNTING
+permit ip 10.1.50.0 0.0.0.255 10.1.120.0 0.0.0.255
+permit ip 10.1.50.0 0.0.0.255 10.1.100.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.0.0.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.0.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.10.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.20.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.30.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.40.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.50.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.60.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.70.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.80.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.90.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.110.0 0.0.0.255
+deny ip 10.1.50.0 0.0.0.255 10.1.200.0 0.0.0.255
+permit ip any any
+interface vlan 50
+ip access-group RESTRICT_ACCOUNTING in
+
+## for DSW1 & DSW2 ##
+ip access-list extended STANDARD_ACCESS
+deny ip any 10.0.0.0 0.0.0.255
+deny ip any 10.1.50.0 0.0.0.255
+deny ip any 10.1.0.0 0.0.0.255
+deny ip any 10.1.200.0 0.0.0.255
+permit ip any any
+interface vlan 10
+ip access-group STANDARD_ACCESS in
+interface vlan 20
+ip access-group STANDARD_ACCESS in
+interface vlan 30
+ip access-group STANDARD_ACCESS in
+interface vlan 40
+ip access-group STANDARD_ACCESS in
+interface vlan 60
+ip access-group STANDARD_ACCESS in
+
+## for DSW3 & DSW4 ##
+ip access-list extended STANDARD_ACCESS
+deny ip any 10.0.0.0 0.0.0.255
+deny ip any 10.1.50.0 0.0.0.255
+deny ip any 10.1.0.0 0.0.0.255
+deny ip any 10.1.200.0 0.0.0.255
+permit ip any any
+interface vlan 70
+ip access-group STANDARD_ACCESS in
+interface vlan 80
+ip access-group STANDARD_ACCESS in
+interface vlan 90
+ip access-group STANDARD_ACCESS in
+interface vlan 110
+ip access-group STANDARD_ACCESS in
+
+======= 2. Port Security =======
+## for ASW1-AW11 ##
+interface f0/1
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+interface f0/23
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+
+## for ASW12 ##
+interface range f0/1-5
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+exit
+do copy run start
+
+======= 3. DHCP Snooping =======
+## for ASW1-ASW6 ##
+ip dhcp snooping
+ip dhcp snooping vlan 10,20,30,40,50,60,200
+no ip dhcp snooping information option
+interface range g0/1-2
+ip dhcp snooping trust
+interface f0/24
+ip dhcp snooping limit rate 100
+interface range f0/1,f0/23
+ip dhcp snooping limit rate 15
+
+## for ASW7-ASW11 ##
+ip dhcp snooping
+ip dhcp snooping vlan 70,80,90,100,110,120,200
+no ip dhcp snooping information option
+interface range g0/1-2
+ip dhcp snooping trust
+interface f0/24
+ip dhcp snooping limit rate 100
+interface range f0/1,f0/23
+ip dhcp snooping limit rate 15
+
+## for ASW12 ##
+ip dhcp snooping
+ip dhcp snooping vlan 70,80,90,100,110,120,200
+no ip dhcp snooping information option
+interface range g0/1-2
+ip dhcp snooping trust
+interface range f0/1-5
+ip dhcp snooping limit rate 15
+
+======= 4. Dynamic Arp Inspection =======
+## for ASW1-ASW6 ##
+ip arp inspection vlan 10,20,30,40,50,60,200
+ip arp inspection validate dst-mac src-mac ip
+interface range g0/1-2
+ip arp inspection trust
+
+## for ASW7-ASW12 ##
+ip arp inspection vlan 70,80,90,100,110,120,200
+ip arp inspection validate dst-mac src-mac ip
+interface range g0/1-2
+ip arp inspection trust

@@ -1,0 +1,71 @@
+=========================
+PART 6: TELEPHONY-SERVICE
+=========================
+ 
+======= 1. Configure Interfaces =======
+## for Telephony Server ##
+interface f0/0
+description ## TO ASW12 VLAN200 ##
+ip address 10.1.200.133 255.255.255.128
+no shutdown
+exit
+interface f0/1
+description ## TO ASW12 VLAN120 ##
+ip address 10.1.120.10 255.255.255.0
+no shutdown
+
+======= 2. DHCP Pools =======
+## for Telephony Server ##
+ip dhcp excluded-address 10.1.200.1 10.1.200.10
+ip dhcp excluded-address 10.1.200.129 10.1.200.138
+ip dhcp pool VOICE-FL12
+network 10.1.200.0 255.255.255.128
+default-router 10.1.200.1
+option 150 ip 10.1.200.133
+dns-server 10.1.120.30
+exit
+ip dhcp pool VOICE-FL34
+network 10.1.200.128 255.255.255.128
+default-router 10.1.200.129
+option 150 ip 10.1.200.133
+dns-server 10.1.120.30
+
+======= 3. Default Route =======
+## for Telephony Server ##
+ip route 0.0.0.0 0.0.0.0 10.1.200.129
+
+======= 4. Telephony Service =======
+## for telephony-service ##
+telephony-service
+max-ephones 11
+max-dn 11
+ip source-address 10.1.200.133 port 2000
+auto assign 1 to 11
+exit
+ephone-dn 1
+number 1001
+ephone-dn 2
+number 1002
+ephone-dn 3
+number 1003
+ephone-dn 4
+number 1004
+ephone-dn 5
+number 1005
+ephone-dn 6
+number 1006
+ephone-dn 7
+number 1007
+ephone-dn 8
+number 1008
+ephone-dn 9
+number 1009
+ephone-dn 10
+number 1010
+ephone-dn 11
+number 1011
+
+======= 2. Enable IP-Helper Address for Voice Vlan =======
+## for DSW1 & DSW2 ##
+interface vlan 200
+ip helper-address 10.1.200.133
