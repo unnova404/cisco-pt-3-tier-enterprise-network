@@ -84,7 +84,9 @@ An Edge Router connects the internal network to a simulated ISP, enabling intern
 - 11 autonomous access points deployed, one per department
 - Per-department SSIDs with WPA2-PSK authentication
 - Non-overlapping 5 GHz channels assigned to minimize interference
-  
+
+For more details click [here](network-documentation.md)
+
 ---
 
 ## Author
